@@ -1,0 +1,35 @@
+{
+  "institution": "Northbridge Wealth \u2014 Demonstration Environment (Synthetic)",
+  "reporting_date": "2026-10-30",
+  "reporting_currency": "USD",
+  "seed": 20261112,
+  "cut_off_time": "17:00:00 EST",
+  "sources": {
+    "custody_balances": {
+      "file_name": "custody_balances.csv",
+      "row_count": 600,
+      "declared_control_total_usd": "934052679.8072"
+    },
+    "ledger_transactions": {
+      "file_name": "ledger_transactions.csv",
+      "row_count": 12000,
+      "declared_control_total_usd": "135895043.3922"
+    },
+    "trades": {
+      "file_name": "trades.json",
+      "row_count": 6264
+    },
+    "crm_accounts": {
+      "file_name": "crm_accounts.csv",
+      "row_count": 600
+    },
+    "market_prices": {
+      "file_name": "market_prices.csv",
+      "row_count": 10
+    },
+    "fx_rates": {
+      "file_name": "fx_rates.csv",
+      "row_count": 4
+    }
+  }
+}

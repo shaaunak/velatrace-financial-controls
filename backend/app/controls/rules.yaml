@@ -1,0 +1,227 @@
+# VelaTrace Financial Control Library Configuration
+# Registered handlers only — YAML never executes arbitrary code or SQL.
+
+rules:
+  - rule_id: CTL-COMP-001
+    version: "1.0.0"
+    name: "Required Source Files Present"
+    business_description: "Verifies all six required wealth management source feeds (custody_balances, ledger_transactions, trades, crm_accounts, market_prices, fx_rates) were received for the reporting batch."
+    control_family: "Completeness"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Data Engineering"
+    tolerance_abs: null
+    tolerance_pct: null
+    handler_name: "check_required_sources_present"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-COMP-002
+    version: "1.0.0"
+    name: "Non-Empty Source Feed"
+    business_description: "Ensures no ingested source file is unexpectedly empty (zero data rows)."
+    control_family: "Completeness"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Data Engineering"
+    tolerance_abs: null
+    tolerance_pct: null
+    handler_name: "check_non_empty_sources"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-COMP-003
+    version: "1.0.0"
+    name: "Manifest Row Count & Control Total Match"
+    business_description: "Compares actual ingested row count and declared monetary control total against the source manifest."
+    control_family: "Completeness"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Financial Control"
+    tolerance_abs: "0.0100"
+    tolerance_pct: null
+    handler_name: "check_manifest_row_and_total"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-UNIQ-001
+    version: "1.0.0"
+    name: "Duplicate External Transaction ID"
+    business_description: "Detects duplicate external_txn_id values within the ledger transaction feed for a batch, preventing double-counting of inflows, outflows, or fees."
+    control_family: "Uniqueness"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Financial Control"
+    tolerance_abs: "0.0000"
+    tolerance_pct: null
+    handler_name: "check_duplicate_transaction_ids"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-UNIQ-002
+    version: "1.0.0"
+    name: "Suspicious Duplicate Business Key"
+    business_description: "Flags transactions sharing identical account, trade date, security, type, and net amount but different transaction IDs for analyst investigation (non-blocking warning)."
+    control_family: "Uniqueness"
+    severity: "MEDIUM"
+    is_blocking: false
+    is_waivable: true
+    owner_team: "Reporting Operations"
+    tolerance_abs: "0.0000"
+    tolerance_pct: null
+    handler_name: "check_suspicious_duplicate_business_keys"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-REF-001
+    version: "1.0.0"
+    name: "Valid Canonical Account Reference"
+    business_description: "Ensures every custody balance and ledger transaction maps to a known canonical investment account."
+    control_family: "Referential Integrity"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Data Engineering"
+    tolerance_abs: null
+    tolerance_pct: null
+    handler_name: "check_unknown_accounts"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-REF-002
+    version: "1.0.0"
+    name: "Valid Advisor Assignment"
+    business_description: "Verifies all accounts in the CRM feed reference an active, registered wealth advisor."
+    control_family: "Referential Integrity"
+    severity: "HIGH"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Reporting Operations"
+    tolerance_abs: null
+    tolerance_pct: null
+    handler_name: "check_unknown_advisors"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-REF-003
+    version: "1.0.0"
+    name: "FX Rate Coverage for Reporting Currency"
+    business_description: "Verifies that every non-USD currency appearing in custody balances or ledger transactions has a valid FX conversion rate to USD."
+    control_family: "Referential Integrity"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Treasury & Pricing"
+    tolerance_abs: null
+    tolerance_pct: null
+    handler_name: "check_fx_rate_coverage"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-REF-004
+    version: "1.0.0"
+    name: "Market Price Coverage for Traded Securities"
+    business_description: "Verifies every security_id in trades or security transactions has a closing market price on the reporting date."
+    control_family: "Referential Integrity"
+    severity: "HIGH"
+    is_blocking: true
+    is_waivable: true
+    owner_team: "Treasury & Pricing"
+    tolerance_abs: null
+    tolerance_pct: null
+    handler_name: "check_market_price_coverage"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-BAL-001
+    version: "1.0.0"
+    name: "Account Balance Roll-Forward Continuity"
+    business_description: "Validates Opening Assets + External Inflows - External Outflows + Market Movement - Fees = Custody Closing Assets within $0.05 tolerance per account."
+    control_family: "Balance Continuity"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Financial Control"
+    tolerance_abs: "0.0500"
+    tolerance_pct: null
+    handler_name: "check_balance_continuity"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-XSYS-001
+    version: "1.0.0"
+    name: "Cross-System Custody vs Calculated Mart Total"
+    business_description: "Reconciles total institutional assets in Custody against the calculated Reporting Mart total within $1.00 tolerance."
+    control_family: "Cross-System Reconciliation"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Financial Control"
+    tolerance_abs: "1.0000"
+    tolerance_pct: null
+    handler_name: "check_cross_system_custody_vs_mart"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-XSYS-002
+    version: "1.0.0"
+    name: "Trading System vs Ledger Trade Settlement Match"
+    business_description: "Reconciles gross trade notional in the trading system against BUY/SELL entries in the internal ledger."
+    control_family: "Cross-System Reconciliation"
+    severity: "HIGH"
+    is_blocking: false
+    is_waivable: true
+    owner_team: "Trade Operations"
+    tolerance_abs: "1.0000"
+    tolerance_pct: null
+    handler_name: "check_trades_vs_ledger"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-RSN-001
+    version: "1.0.0"
+    name: "Thousand-Times Amount Scaling Anomaly"
+    business_description: "Detects single transactions exceeding $5,000,000 or 25x the account opening balance, indicative of a 1000x scaling error."
+    control_family: "Reasonableness"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: true
+    owner_team: "Financial Control"
+    tolerance_abs: "5000000.0000"
+    tolerance_pct: null
+    handler_name: "check_thousand_times_scaling"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-RSN-002
+    version: "1.0.0"
+    name: "Transaction Sign Convention Check"
+    business_description: "Verifies deposits carry positive net amounts and withdrawals/fees carry expected sign conventions (no sign reversals)."
+    control_family: "Reasonableness"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Financial Control"
+    tolerance_abs: null
+    tolerance_pct: null
+    handler_name: "check_sign_convention"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-RSN-003
+    version: "1.0.0"
+    name: "Backdated Transaction Cut-Off Check"
+    business_description: "Flags transactions whose trade_date is more than 30 days prior to the batch reporting_date."
+    control_family: "Reasonableness"
+    severity: "MEDIUM"
+    is_blocking: false
+    is_waivable: true
+    owner_team: "Reporting Operations"
+    tolerance_abs: "30.0000"
+    tolerance_pct: null
+    handler_name: "check_backdated_transactions"
+    effective_date: "2026-01-01"
+
+  - rule_id: CTL-STR-001
+    version: "1.0.0"
+    name: "Source Schema & Transaction Category Integrity"
+    business_description: "Verifies all ingested source files conform to expected schema columns and known transaction categories."
+    control_family: "Structural Controls"
+    severity: "CRITICAL"
+    is_blocking: true
+    is_waivable: false
+    owner_team: "Data Engineering"
+    tolerance_abs: null
+    tolerance_pct: null
+    handler_name: "check_structural_integrity"
+    effective_date: "2026-01-01"

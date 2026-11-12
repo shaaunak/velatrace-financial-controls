@@ -1,48 +1,69 @@
 import React from "react";
-import { CheckCircle2, AlertTriangle, XOctagon, ShieldAlert, Clock } from "lucide-react";
 
-const STYLES: Record<string, string> = {
-  PASS: "bg-[#ECFDF3] text-[#168363] border-[#ABEFC6]",
-  OFFICIAL: "bg-[#ECFDF3] text-[#168363] border-[#ABEFC6]",
-  RESOLVED: "bg-[#ECFDF3] text-[#168363] border-[#ABEFC6]",
-  APPROVED: "bg-[#ECFDF3] text-[#168363] border-[#ABEFC6]",
-  CORRECTED_PASSED: "bg-[#ECFDF3] text-[#168363] border-[#ABEFC6]",
-  PASS_WITH_WARNINGS: "bg-[#FFFAEB] text-[#B54708] border-[#FEDF89]",
-  WARN: "bg-[#FFFAEB] text-[#B54708] border-[#FEDF89]",
-  WARNING: "bg-[#FFFAEB] text-[#B54708] border-[#FEDF89]",
-  MEDIUM: "bg-[#FFFAEB] text-[#B54708] border-[#FEDF89]",
-  INVESTIGATING: "bg-[#EFF4FF] text-[#3267D6] border-[#B2DDFF]",
-  WAIVER_REQUESTED: "bg-[#EFF4FF] text-[#3267D6] border-[#B2DDFF]",
-  DIAGNOSTIC: "bg-[#F2F4F7] text-[#344054] border-[#D0D5DD]",
-  WAIVED: "bg-[#F2F4F7] text-[#344054] border-[#D0D5DD]",
-  BLOCKED: "bg-[#FEF3F2] text-[#C74242] border-[#FECDCA]",
-  BLOCKED_VERIFIED: "bg-[#FEF3F2] text-[#C74242] border-[#FECDCA]",
-  FAIL: "bg-[#FEF3F2] text-[#C74242] border-[#FECDCA]",
-  CRITICAL: "bg-[#FEF3F2] text-[#C74242] border-[#FECDCA]",
-  HIGH: "bg-[#FEF3F2] text-[#C74242] border-[#FECDCA]",
-  OPEN: "bg-[#FEF3F2] text-[#C74242] border-[#FECDCA]",
+const STATUS_STYLES: Record<string, string> = {
+  // Verified / Positive
+  PASS: "bg-[#162E21] text-[#8AE2A4] border-[#2E7D52]",
+  PASSED: "bg-[#162E21] text-[#8AE2A4] border-[#2E7D52]",
+  OFFICIAL: "bg-[#162E21] text-[#8AE2A4] border-[#2E7D52]",
+  RESOLVED: "bg-[#162E21] text-[#8AE2A4] border-[#2E7D52]",
+  APPROVED: "bg-[#162E21] text-[#8AE2A4] border-[#2E7D52]",
+  CORRECTED: "bg-[#162E21] text-[#8AE2A4] border-[#2E7D52]",
+  BALANCED: "bg-[#162E21] text-[#8AE2A4] border-[#2E7D52]",
+  ACTIVE: "bg-[#162E21] text-[#8AE2A4] border-[#2E7D52]",
+  MATCH: "bg-[#162E21] text-[#8AE2A4] border-[#2E7D52]",
+  VERIFIED: "bg-[#162E21] text-[#8AE2A4] border-[#2E7D52]",
+
+  // Warning / Pending / High
+  PASS_WITH_WARNINGS: "bg-[#2E2415] text-[#FFCE73] border-[#C27803]",
+  WARNING: "bg-[#2E2415] text-[#FFCE73] border-[#C27803]",
+  WARN: "bg-[#2E2415] text-[#FFCE73] border-[#C27803]",
+  HIGH: "bg-[#2E2415] text-[#FFCE73] border-[#C27803]",
+  INVESTIGATING: "bg-[#2E2415] text-[#FFCE73] border-[#C27803]",
+  WAIVER_REQUESTED: "bg-[#2E2415] text-[#FFCE73] border-[#C27803]",
+  PENDING: "bg-[#2E2415] text-[#FFCE73] border-[#C27803]",
+  DIAGNOSTIC: "bg-[#2E2415] text-[#FFCE73] border-[#C27803]",
+
+  // Blocked / Critical / Variance
+  BLOCKED: "bg-[#331A1E] text-[#FF9D85] border-[#DE785F]",
+  FAIL: "bg-[#331A1E] text-[#FF9D85] border-[#DE785F]",
+  FAILED: "bg-[#331A1E] text-[#FF9D85] border-[#DE785F]",
+  CRITICAL: "bg-[#331A1E] text-[#FF9D85] border-[#DE785F]",
+  REJECTED: "bg-[#331A1E] text-[#FF9D85] border-[#DE785F]",
+  OPEN: "bg-[#331A1E] text-[#FF9D85] border-[#DE785F]",
+  COLLISION: "bg-[#331A1E] text-[#FF9D85] border-[#DE785F]",
+  HARD_BLOCK: "bg-[#331A1E] text-[#FF9D85] border-[#DE785F]",
+
+  // Citron / Focal
+  STAGED: "bg-[#22290A] text-[#D9F66F] border-[#D9F66F]/50",
+  READY: "bg-[#22290A] text-[#D9F66F] border-[#D9F66F]/50",
+  LIVE: "bg-[#22290A] text-[#D9F66F] border-[#D9F66F]/50",
+
+  // Neutral
+  WAIVED: "bg-[#201927] text-[#B7A9C7] border-[#372E40]",
+  FALSE_POSITIVE: "bg-[#201927] text-[#B7A9C7] border-[#372E40]",
+  MEDIUM: "bg-[#201927] text-[#B7A9C7] border-[#372E40]",
+  LOW: "bg-[#201927] text-[#90937E] border-[#372E40]",
+  INFO: "bg-[#201927] text-[#B7A9C7] border-[#372E40]",
+  INACTIVE: "bg-[#201927] text-[#90937E] border-[#372E40]",
 };
 
-export function StatusBadge({ status, size = "sm" }: { status: string; size?: "sm" | "md" }) {
-  const key = status.toUpperCase();
-  const cls = STYLES[key] || "bg-[#F2F4F7] text-[#475467] border-[#E5E9F0]";
-  const pad = size === "md" ? "px-3 py-1 text-xs font-semibold" : "px-2 py-0.5 text-[11px] font-medium";
-
-  let Icon = Clock;
-  if (["PASS", "OFFICIAL", "RESOLVED", "APPROVED", "CORRECTED_PASSED"].includes(key)) {
-    Icon = CheckCircle2;
-  } else if (["PASS_WITH_WARNINGS", "WARN", "WARNING", "MEDIUM"].includes(key)) {
-    Icon = AlertTriangle;
-  } else if (["BLOCKED", "BLOCKED_VERIFIED", "FAIL", "CRITICAL"].includes(key)) {
-    Icon = XOctagon;
-  } else if (["OPEN", "HIGH"].includes(key)) {
-    Icon = ShieldAlert;
-  }
+export function StatusBadge({
+  status,
+  label,
+}: {
+  status: string;
+  label?: string;
+}) {
+  const norm = status.toUpperCase().replace(/\s+/g, "_");
+  const cls =
+    STATUS_STYLES[norm] ||
+    "bg-[#201927] text-[#B7A9C7] border-[#372E40]";
 
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-md border ${cls} ${pad} whitespace-nowrap`}>
-      <Icon className={size === "md" ? "h-3.5 w-3.5" : "h-3 w-3"} />
-      {status.replace(/_/g, " ")}
+    <span
+      className={`inline-flex items-center gap-1 rounded-[2px] border px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.06em] whitespace-nowrap ${cls}`}
+    >
+      {label ?? status.replace(/_/g, " ")}
     </span>
   );
 }

@@ -1,32 +1,84 @@
 @import "tailwindcss";
 
 :root {
-  --vt-canvas: #F7F8FA;
-  --vt-card: #FFFFFF;
-  --vt-text-primary: #172033;
-  --vt-text-secondary: #667085;
-  --vt-navy: #101828;
-  --vt-blue: #3267D6;
-  --vt-border: #E5E9F0;
-  --vt-success: #168363;
-  --vt-warning: #D18A22;
-  --vt-critical: #C74242;
+  /* VelaTrace Editorial Terminal Tokens */
+  --vt-canvas: #17111e;
+  --vt-canvas-lowest: #120b19;
+  --vt-surface-low: #201927;
+  --vt-surface: #241d2b;
+  --vt-surface-high: #2e2735;
+  --vt-surface-highest: #393241;
+  --vt-border: #372e40;
+  --vt-border-subtle: #2e2735;
+
+  /* Text & Brand */
+  --vt-text-primary: #ebdef2;
+  --vt-text-secondary: #b7a9c7;
+  --vt-text-muted: #90937e;
+  --vt-citron: #d9f66f;
+  --vt-citron-hover: #ceea64;
+  --vt-on-citron: #171e00;
+
+  /* Semantic Status */
+  --vt-verified-bg: #162e21;
+  --vt-verified-border: #2e7d52;
+  --vt-verified-text: #8ae2a4;
+
+  --vt-coral: #de785f;
+  --vt-coral-bg: #2f1b22;
+  --vt-coral-text: #ff9d85;
+
+  --vt-warn-bg: #2e2415;
+  --vt-warn-border: #c27803;
+  --vt-warn-text: #ffce73;
+
+  /* Editorial Document / Light Mode */
+  --vt-porcelain: #f5f1e9;
+  --vt-porcelain-subtle: #ece7dc;
+  --vt-porcelain-border: #d5ccc0;
+  --vt-ink: #19141e;
+  --vt-ink-muted: #5a5263;
 }
 
 @theme inline {
   --color-background: var(--vt-canvas);
   --color-foreground: var(--vt-text-primary);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-jakarta), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: var(--font-outfit), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: var(--font-ibm-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
 body {
   background-color: var(--vt-canvas);
   color: var(--vt-text-primary);
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-jakarta), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+code, pre, .font-mono {
+  font-family: var(--font-ibm-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+/* Architectural hairline scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #120b19;
+}
+::-webkit-scrollbar-thumb {
+  background: #372e40;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4f445e;
 }

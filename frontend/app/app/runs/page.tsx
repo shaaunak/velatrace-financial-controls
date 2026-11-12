@@ -44,111 +44,119 @@ export default function RunsPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold text-[#101828]">Reconciliation Runs</h1>
-          <p className="text-xs text-[#667085] mt-0.5">
-            Every processing batch creates a durable, uniquely identifiable audit record.
-          </p>
+      <div>
+        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[#D9F66F]">
+          EXECUTION LEDGER // DURABLE BATCH HISTORY
         </div>
+        <h1 className="mt-1 font-display text-3xl font-bold tracking-[-0.02em] text-[#EBDEF2]">
+          Reconciliation Runs
+        </h1>
+        <p className="mt-1 text-xs text-[#B7A9C7]">
+          Every processing batch creates a durable, uniquely identifiable audit record across
+          production and sandbox workspaces.
+        </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 rounded-lg border border-[#E5E9F0] bg-white p-3.5">
+      <div className="flex flex-wrap items-center gap-3 rounded-[4px] border border-[#372E40] bg-[#201927] p-3">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="h-3.5 w-3.5 text-[#667085] absolute left-3 top-2.5" />
+          <Search className="h-3.5 w-3.5 text-[#90937E] absolute left-3 top-2.5" />
           <input
             type="text"
             placeholder="Search batch code..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-md border border-[#E5E9F0] pl-8 pr-3 py-1.5 text-xs focus:border-[#3267D6] focus:outline-none"
+            className="w-full rounded-[4px] border border-[#372E40] bg-[#120B19] pl-8 pr-3 py-1.5 font-mono text-xs text-[#EBDEF2] placeholder-[#90937E] focus:border-[#D9F66F] focus:outline-none"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-md border border-[#E5E9F0] bg-white px-3 py-1.5 text-xs text-[#172033]"
+          className="rounded-[4px] border border-[#372E40] bg-[#120B19] px-3 py-1.5 font-mono text-xs text-[#EBDEF2] focus:border-[#D9F66F] focus:outline-none"
         >
-          <option value="">All Statuses</option>
+          <option value="">ALL STATUSES</option>
           <option value="PASS">PASS</option>
           <option value="PASS_WITH_WARNINGS">PASS WITH WARNINGS</option>
           <option value="BLOCKED">BLOCKED</option>
         </select>
-        <label className="inline-flex items-center gap-2 text-xs text-[#667085] cursor-pointer">
+        <label className="inline-flex items-center gap-2 font-mono text-xs text-[#B7A9C7] cursor-pointer">
           <input
             type="checkbox"
             checked={includeSandbox}
             onChange={(e) => setIncludeSandbox(e.target.checked)}
-            className="rounded border-[#D0D5DD]"
+            className="rounded-[2px] border-[#372E40]"
           />
-          Include Failure Lab Sandbox runs
+          Include Failure Lab Sandbox Runs
         </label>
       </div>
 
-      <div className="rounded-lg border border-[#E5E9F0] bg-white overflow-hidden">
+      <div className="rounded-[4px] border border-[#372E40] bg-[#241D2B] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#F9FAFB] text-[#667085] border-b border-[#E5E9F0]">
+            <thead className="border-b border-[#372E40] bg-[#120B19] font-mono text-[10px] uppercase tracking-[0.08em] text-[#90937E]">
               <tr>
-                <th className="px-4 py-3 font-medium">Batch ID</th>
-                <th className="px-4 py-3 font-medium">Reporting Date</th>
-                <th className="px-4 py-3 font-medium">Environment</th>
-                <th className="px-4 py-3 font-medium text-right">Sources</th>
-                <th className="px-4 py-3 font-medium text-right">Ingested</th>
-                <th className="px-4 py-3 font-medium text-right">Exceptions</th>
-                <th className="px-4 py-3 font-medium text-right">Variance (USD)</th>
-                <th className="px-4 py-3 font-medium text-right">Duration</th>
-                <th className="px-4 py-3 font-medium">Status</th>
+                <th className="px-4 py-3">Batch Code</th>
+                <th className="px-4 py-3">Date</th>
+                <th className="px-4 py-3">Environment</th>
+                <th className="px-4 py-3">Gate Status</th>
+                <th className="px-4 py-3 text-right">Records</th>
+                <th className="px-4 py-3 text-right">Total Assets</th>
+                <th className="px-4 py-3 text-right">Variance</th>
+                <th className="px-4 py-3 text-right">Inspect</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E9F0]">
+            <tbody className="divide-y divide-[#372E40]">
               {isLoading ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-[#667085]">
+                  <td colSpan={8} className="px-4 py-8 text-center font-mono text-[#90937E]">
                     Loading reconciliation batches...
                   </td>
                 </tr>
               ) : (data?.items || []).length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-[#667085]">
-                    No batches match the current filter.
+                  <td colSpan={8} className="px-4 py-8 text-center font-mono text-[#90937E]">
+                    No batches match your filter.
                   </td>
                 </tr>
               ) : (
                 data!.items.map((b) => (
-                  <tr key={b.id} className="hover:bg-[#F9FAFB] transition-colors">
-                    <td className="px-4 py-3 font-mono font-medium">
-                      <Link href={`/app/runs/${b.id}`} className="text-[#3267D6] hover:underline">
+                  <tr key={b.id} className="h-10 hover:bg-[#302839] transition-colors">
+                    <td className="px-4 py-2.5 font-mono font-semibold text-[#D9F66F]">
+                      <Link href={`/app/runs/${b.id}`} className="hover:underline">
                         {b.batch_code}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 text-[#172033]">{b.reporting_date}</td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${
-                          b.is_sandbox
-                            ? "bg-[#F2F4F7] text-[#475467]"
-                            : "bg-[#EFF4FF] text-[#3267D6]"
-                        }`}
-                      >
-                        {b.is_sandbox ? `SANDBOX (${b.scenario_key || "sim"})` : "DEMO PROD"}
-                      </span>
+                    <td className="px-4 py-2.5 font-mono text-[#B7A9C7]">{b.reporting_date}</td>
+                    <td className="px-4 py-2.5">
+                      <StatusBadge
+                        status={b.is_sandbox ? "STAGED" : "VERIFIED"}
+                        label={b.is_sandbox ? "SANDBOX" : "PROD DEMO"}
+                      />
                     </td>
-                    <td className="px-4 py-3 text-right tabular-nums">{b.sources_processed}</td>
-                    <td className="px-4 py-3 text-right tabular-nums">{formatNumber(b.records_ingested)}</td>
-                    <td className="px-4 py-3 text-right tabular-nums">{b.exceptions_count}</td>
+                    <td className="px-4 py-2.5">
+                      <StatusBadge status={b.status} />
+                    </td>
+                    <td className="px-4 py-2.5 text-right font-mono tabular-nums text-[#B7A9C7]">
+                      {formatNumber(b.records_ingested)}
+                    </td>
+                    <td className="px-4 py-2.5 text-right font-mono tabular-nums text-[#EBDEF2]">
+                      {formatUsd(b.total_assets_usd)}
+                    </td>
                     <td
-                      className={`px-4 py-3 text-right font-mono tabular-nums ${
-                        Math.abs(b.financial_variance_usd) > 1 ? "text-[#C74242] font-semibold" : "text-[#168363]"
+                      className={`px-4 py-2.5 text-right font-mono tabular-nums ${
+                        Math.abs(b.financial_variance_usd) > 0.01
+                          ? "text-[#FF9D85] font-semibold"
+                          : "text-[#8AE2A4]"
                       }`}
                     >
                       {formatUsd(b.financial_variance_usd)}
                     </td>
-                    <td className="px-4 py-3 text-right tabular-nums text-[#667085]">
-                      {b.duration_ms ? `${b.duration_ms} ms` : "—"}
-                    </td>
-                    <td className="px-4 py-3">
-                      <StatusBadge status={b.status} />
+                    <td className="px-4 py-2.5 text-right font-mono">
+                      <Link
+                        href={`/app/runs/${b.id}`}
+                        className="text-[11px] font-semibold text-[#D9F66F] hover:underline"
+                      >
+                        Detail →
+                      </Link>
                     </td>
                   </tr>
                 ))

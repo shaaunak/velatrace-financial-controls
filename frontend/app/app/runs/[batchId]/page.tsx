@@ -92,13 +92,13 @@ export default function RunDetailPage() {
     onError: (err: Error) => {
       setPubMsg({
         type: "err",
-        text: err instanceof ApiError ? err.message : err.message,
+        text: err instanceof ApiError ? `HTTP ${err.status}: ${err.message}` : err.message,
       });
     },
   });
 
   if (isLoading || !data) {
-    return <div className="p-8 text-xs text-[#667085]">Loading batch execution evidence...</div>;
+    return <div className="p-8 font-mono text-xs text-[#90937E]">Loading batch execution evidence...</div>;
   }
 
   const { batch, stages, sources, controls } = data;
@@ -107,31 +107,36 @@ export default function RunDetailPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <Link href="/app/runs" className="inline-flex items-center gap-1 text-xs text-[#667085] hover:text-[#172033] mb-1">
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to Runs
+          <Link
+            href="/app/runs"
+            className="inline-flex items-center gap-1 font-mono text-[11px] text-[#B7A9C7] hover:text-[#D9F66F] mb-1.5"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" /> BACK TO RUNS
           </Link>
           <div className="flex items-center gap-3">
-            <h1 className="text-xl font-semibold font-mono text-[#101828]">{batch.batch_code}</h1>
-            <StatusBadge status={batch.status} size="md" />
+            <h1 className="font-display text-2xl font-bold font-mono text-[#EBDEF2]">
+              {batch.batch_code}
+            </h1>
+            <StatusBadge status={batch.status} />
           </div>
-          <p className="text-xs text-[#667085] mt-1">
+          <p className="font-mono text-[11px] text-[#90937E] mt-1">
             Reporting Date: {batch.reporting_date} • Triggered by {batch.triggered_by} •{" "}
             {batch.duration_ms ?? 0} ms
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2">
           <Link
             href={`/app/investigate?batchId=${batch.id}`}
-            className="inline-flex items-center gap-1.5 rounded-md border border-[#E5E9F0] bg-white px-3 py-2 text-xs font-medium text-[#172033] hover:bg-[#F2F4F7]"
+            className="inline-flex items-center gap-1.5 rounded-[4px] border border-[#372E40] bg-[#241D2B] px-3 py-2 font-mono text-xs font-medium text-[#EBDEF2] hover:border-[#D9F66F]"
           >
-            <SearchCode className="h-3.5 w-3.5 text-[#3267D6]" />
+            <SearchCode className="h-3.5 w-3.5 text-[#D9F66F]" />
             Investigate Variance
           </Link>
           <button
             onClick={() => publishMut.mutate(false)}
             disabled={publishMut.isPending}
-            className="inline-flex items-center gap-1.5 rounded-md bg-[#101828] px-3.5 py-2 text-xs font-medium text-white hover:bg-[#1D2939] disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-[4px] bg-[#D9F66F] px-3.5 py-2 font-mono text-xs font-semibold text-[#171E00] hover:bg-[#CEEA64] disabled:opacity-50 cursor-pointer"
           >
             <FileSpreadsheet className="h-3.5 w-3.5" />
             Publish Official Report
@@ -140,9 +145,9 @@ export default function RunDetailPage() {
             <button
               onClick={() => publishMut.mutate(true)}
               disabled={publishMut.isPending}
-              className="inline-flex items-center gap-1.5 rounded-md border border-[#D0D5DD] bg-white px-3 py-2 text-xs font-medium text-[#344054] hover:bg-[#F2F4F7]"
+              className="inline-flex items-center gap-1.5 rounded-[4px] border border-[#372E40] bg-[#120B19] px-3 py-2 font-mono text-xs font-medium text-[#B7A9C7] hover:border-[#B7A9C7] cursor-pointer"
             >
-              Generate Diagnostic Preview
+              Diagnostic Preview
             </button>
           )}
         </div>
@@ -150,10 +155,10 @@ export default function RunDetailPage() {
 
       {pubMsg && (
         <div
-          className={`flex items-start gap-2.5 rounded-lg border p-3.5 text-xs ${
+          className={`flex items-start gap-2.5 rounded-[4px] border p-3.5 font-mono text-xs ${
             pubMsg.type === "ok"
-              ? "border-[#ABEFC6] bg-[#ECFDF3] text-[#168363]"
-              : "border-[#FECDCA] bg-[#FEF3F2] text-[#C74242]"
+              ? "border-[#2E7D52] bg-[#162E21] text-[#8AE2A4]"
+              : "border-[#DE785F] bg-[#2F1B22] text-[#FF9D85]"
           }`}
         >
           {pubMsg.type === "ok" ? (
@@ -166,119 +171,120 @@ export default function RunDetailPage() {
       )}
 
       {/* Financial Summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div className="rounded-lg border border-[#E5E9F0] bg-white p-4">
-          <div className="text-xs text-[#667085]">Custody Total (USD)</div>
-          <div className="mt-1 text-lg font-semibold tabular-nums">{formatUsd(batch.custody_total_usd)}</div>
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+        <div className="rounded-[4px] border border-[#372E40] bg-[#241D2B] p-4">
+          <div className="font-mono text-[10px] uppercase text-[#B7A9C7]">CUSTODY TOTAL</div>
+          <div className="mt-1.5 font-display text-xl font-bold text-[#EBDEF2] tabular-nums">
+            {formatUsd(batch.custody_total_usd)}
+          </div>
         </div>
-        <div className="rounded-lg border border-[#E5E9F0] bg-white p-4">
-          <div className="text-xs text-[#667085]">Calculated Mart Total (USD)</div>
-          <div className="mt-1 text-lg font-semibold tabular-nums">{formatUsd(batch.calculated_total_usd)}</div>
+        <div className="rounded-[4px] border border-[#372E40] bg-[#241D2B] p-4">
+          <div className="font-mono text-[10px] uppercase text-[#B7A9C7]">CALCULATED TOTAL</div>
+          <div className="mt-1.5 font-display text-xl font-bold text-[#EBDEF2] tabular-nums">
+            {formatUsd(batch.calculated_total_usd)}
+          </div>
         </div>
-        <div className="rounded-lg border border-[#E5E9F0] bg-white p-4">
-          <div className="text-xs text-[#667085]">Financial Variance</div>
+        <div
+          className={`rounded-[4px] border p-4 ${
+            Math.abs(batch.financial_variance_usd) > 0.01
+              ? "border-[#DE785F] bg-[#2F1B22]"
+              : "border-[#372E40] bg-[#241D2B]"
+          }`}
+        >
+          <div className="font-mono text-[10px] uppercase text-[#B7A9C7]">VARIANCE</div>
           <div
-            className={`mt-1 text-lg font-semibold tabular-nums ${
-              Math.abs(batch.financial_variance_usd) > 1 ? "text-[#C74242]" : "text-[#168363]"
+            className={`mt-1.5 font-display text-xl font-bold tabular-nums ${
+              Math.abs(batch.financial_variance_usd) > 0.01 ? "text-[#FF9D85]" : "text-[#8AE2A4]"
             }`}
           >
             {formatUsd(batch.financial_variance_usd)}
           </div>
         </div>
-        <div className="rounded-lg border border-[#E5E9F0] bg-white p-4">
-          <div className="text-xs text-[#667085]">Publication Eligibility</div>
-          <div className="mt-1 text-sm font-semibold text-[#101828]">
-            {batch.publication_eligible ? "ELIGIBLE (Controller Sign-Off)" : "BLOCKED BY CONTROLS"}
+        <div className="rounded-[4px] border border-[#372E40] bg-[#241D2B] p-4">
+          <div className="font-mono text-[10px] uppercase text-[#B7A9C7]">RECORDS VALIDATED</div>
+          <div className="mt-1.5 font-display text-xl font-bold text-[#EBDEF2] tabular-nums">
+            {formatNumber(batch.records_validated)} / {formatNumber(batch.records_ingested)}
           </div>
         </div>
       </div>
 
-      {/* Pipeline Stages */}
-      <div className="rounded-lg border border-[#E5E9F0] bg-white p-5">
-        <h2 className="text-sm font-semibold text-[#101828] mb-3">Pipeline Stage Timestamps & Durations</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {stages.map((s) => (
-            <div key={s.stage_name} className="rounded-md border border-[#E5E9F0] bg-[#F9FAFB] p-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-[#101828]">{s.stage_name}</span>
-                <StatusBadge status={s.status === "COMPLETED" ? "PASS" : s.status} />
+      {/* Pipeline Stages & Sources */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="rounded-[4px] border border-[#372E40] bg-[#241D2B] overflow-hidden">
+          <div className="border-b border-[#372E40] bg-[#201927] px-4 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[#B7A9C7]">
+            PIPELINE STAGES ({stages.length})
+          </div>
+          <div className="divide-y divide-[#372E40]">
+            {stages.map((s) => (
+              <div key={s.stage_name} className="px-4 py-2.5 flex items-center justify-between text-xs">
+                <div>
+                  <div className="font-mono font-semibold text-[#EBDEF2]">{s.stage_name}</div>
+                  <div className="font-mono text-[10px] text-[#90937E]">
+                    in: {formatNumber(s.records_in)} → out: {formatNumber(s.records_out)} ({s.duration_ms} ms)
+                  </div>
+                </div>
+                <StatusBadge status={s.status} />
               </div>
-              <div className="mt-2 text-[11px] text-[#667085] tabular-nums">
-                In: {formatNumber(s.records_in)} → Out: {formatNumber(s.records_out)}
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-[4px] border border-[#372E40] bg-[#241D2B] overflow-hidden">
+          <div className="border-b border-[#372E40] bg-[#201927] px-4 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[#B7A9C7]">
+            INGESTED SOURCE SNAPSHOTS ({sources.length})
+          </div>
+          <div className="divide-y divide-[#372E40]">
+            {sources.map((src) => (
+              <div key={src.id} className="px-4 py-2.5 flex items-center justify-between text-xs">
+                <div>
+                  <div className="font-mono font-semibold text-[#D9F66F]">{src.source_system}</div>
+                  <div className="font-mono text-[10px] text-[#B7A9C7]">
+                    {src.file_name} • {formatNumber(src.row_count)} rows • #{src.source_hash.slice(0, 10)}
+                  </div>
+                </div>
+                <StatusBadge status={src.processing_status} />
               </div>
-              <div className="mt-1 text-[11px] font-mono text-[#667085]">{s.duration_ms} ms</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Control Execution Evidence */}
-      <div className="rounded-lg border border-[#E5E9F0] bg-white overflow-hidden">
-        <div className="border-b border-[#E5E9F0] px-5 py-3.5">
-          <h2 className="text-sm font-semibold text-[#101828]">Control Execution Evidence ({controls.length} Rules)</h2>
+      {/* Control Evaluations */}
+      <div className="rounded-[4px] border border-[#372E40] bg-[#241D2B] overflow-hidden">
+        <div className="border-b border-[#372E40] bg-[#201927] px-4 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[#B7A9C7]">
+          CONTROL EVALUATION RESULTS ({controls.length})
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#F9FAFB] text-[#667085] border-b border-[#E5E9F0]">
+            <thead className="border-b border-[#372E40] bg-[#120B19] font-mono text-[10px] uppercase text-[#90937E]">
               <tr>
-                <th className="px-4 py-2.5 font-medium">Rule ID</th>
-                <th className="px-4 py-2.5 font-medium">Blocking</th>
-                <th className="px-4 py-2.5 font-medium text-right">Evaluated</th>
-                <th className="px-4 py-2.5 font-medium text-right">Failed</th>
-                <th className="px-4 py-2.5 font-medium text-right">Variance</th>
-                <th className="px-4 py-2.5 font-medium">Status</th>
-                <th className="px-4 py-2.5 font-medium">Evidence Summary</th>
+                <th className="px-4 py-2.5">Rule ID</th>
+                <th className="px-4 py-2.5">Status</th>
+                <th className="px-4 py-2.5 text-right">Evaluated</th>
+                <th className="px-4 py-2.5 text-right">Failed</th>
+                <th className="px-4 py-2.5 text-right">Variance</th>
+                <th className="px-4 py-2.5">Evidence Summary</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E9F0]">
+            <tbody className="divide-y divide-[#372E40]">
               {controls.map((c) => (
-                <tr key={c.id} className={c.status === "FAIL" ? "bg-[#FEF3F2]/50" : "hover:bg-[#F9FAFB]"}>
-                  <td className="px-4 py-2.5 font-mono font-medium text-[#101828]">
-                    {c.rule_id} <span className="text-[#667085]">v{c.rule_version}</span>
-                  </td>
-                  <td className="px-4 py-2.5">{c.is_blocking ? "Blocking" : "Warning"}</td>
-                  <td className="px-4 py-2.5 text-right tabular-nums">{formatNumber(c.evaluated_count)}</td>
-                  <td className="px-4 py-2.5 text-right tabular-nums font-medium">{c.failed_count}</td>
-                  <td className="px-4 py-2.5 text-right font-mono tabular-nums">
-                    {formatUsd(c.measured_variance_usd)}
+                <tr key={c.id} className="hover:bg-[#302839]">
+                  <td className="px-4 py-2.5 font-mono font-semibold text-[#D9F66F]">
+                    {c.rule_id} <span className="text-[#90937E]">v{c.rule_version}</span>
                   </td>
                   <td className="px-4 py-2.5">
                     <StatusBadge status={c.status} />
                   </td>
-                  <td className="px-4 py-2.5 text-[#475467]">{c.evidence_summary}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Source Manifests */}
-      <div className="rounded-lg border border-[#E5E9F0] bg-white overflow-hidden">
-        <div className="border-b border-[#E5E9F0] px-5 py-3.5">
-          <h2 className="text-sm font-semibold text-[#101828]">Ingested Source Snapshots ({sources.length})</h2>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-[#F9FAFB] text-[#667085] border-b border-[#E5E9F0]">
-              <tr>
-                <th className="px-4 py-2.5 font-medium">Source System</th>
-                <th className="px-4 py-2.5 font-medium">File Name</th>
-                <th className="px-4 py-2.5 font-medium text-right">Rows</th>
-                <th className="px-4 py-2.5 font-medium">Source Hash (SHA-256)</th>
-                <th className="px-4 py-2.5 font-medium">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#E5E9F0]">
-              {sources.map((s) => (
-                <tr key={s.id}>
-                  <td className="px-4 py-2.5 font-medium">{s.source_system}</td>
-                  <td className="px-4 py-2.5 font-mono">{s.file_name}</td>
-                  <td className="px-4 py-2.5 text-right tabular-nums">{formatNumber(s.row_count)}</td>
-                  <td className="px-4 py-2.5 font-mono text-[#667085]">{s.source_hash.slice(0, 24)}…</td>
-                  <td className="px-4 py-2.5">
-                    <StatusBadge status={s.processing_status === "INGESTED" ? "PASS" : s.processing_status} />
+                  <td className="px-4 py-2.5 text-right font-mono tabular-nums text-[#B7A9C7]">
+                    {formatNumber(c.evaluated_count)}
                   </td>
+                  <td className="px-4 py-2.5 text-right font-mono tabular-nums text-[#FF9D85]">
+                    {formatNumber(c.failed_count)}
+                  </td>
+                  <td className="px-4 py-2.5 text-right font-mono tabular-nums text-[#EBDEF2]">
+                    {formatUsd(c.measured_variance_usd)}
+                  </td>
+                  <td className="px-4 py-2.5 text-[#B7A9C7]">{c.evidence_summary}</td>
                 </tr>
               ))}
             </tbody>

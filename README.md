@@ -2,7 +2,9 @@
 
 **Every number. Verified. Every decision. Traceable.**
 
-VelaTrace is a financial reporting assurance, reconciliation, and control-gating platform designed for wealth management operations and financial control teams.
+**Live Frontend Deployment:** [https://velatrace-web.vercel.app](https://velatrace-web.vercel.app)
+
+VelaTrace is a financial reporting assurance, reconciliation, and control-gating platform designed for wealth management operations and financial control teams. Designed in the **VelaTrace Editorial Terminal** aesthetic (dark aubergine, electric citron, burnt coral, and warm porcelain documentation sheets), it pairs institutional visual precision with deterministic PostgreSQL `NUMERIC(20,4)` reconciliation.
 
 > **Synthetic Data Notice:** All institution names, advisors, clients, accounts, balances, and transactions in this project belong to the fictional **Northbridge Wealth — Demonstration Environment** generated deterministically with fixed seed `20261112`. No real client data exists anywhere in this repository.
 
@@ -99,6 +101,19 @@ backend/.venv/bin/pytest backend/tests/test_velatrace_e2e.py -v
 # Frontend TypeScript, ESLint, and production build
 cd frontend && npx tsc --noEmit && npm run lint && npm run build
 ```
+
+## 11. Application Screenshots
+
+| Screen | Preview |
+|---|---|
+| **Editorial Landing Page** | ![Landing Page](docs/screenshots/01_landing.png) |
+| **Executive Overview** | ![Executive Overview](docs/screenshots/02_executive_overview.png) |
+| **Failure Lab — BLOCKED (HTTP 409 Gate)** | ![Failure Lab Blocked](docs/screenshots/03_failure_lab_blocked.png) |
+| **Failure Lab — Remediated & PASS** | ![Failure Lab Pass](docs/screenshots/03b_failure_lab_pass.png) |
+| **Exception Management Desk** | ![Exception Management](docs/screenshots/04_exceptions.png) |
+| **Investigation Workbench** | ![Investigation Workbench](docs/screenshots/05_investigate.png) |
+| **Reports & Publication Center** | ![Reports Center](docs/screenshots/06_reports.png) |
+| **Control Library & Rule Engine** | ![Control Library](docs/screenshots/07_controls.png) |
 
 ## 11. SQL Engineering Highlights
 

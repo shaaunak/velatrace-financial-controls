@@ -38,7 +38,7 @@
 - [x] Local FastAPI (`127.0.0.1:8001`) and Next.js (`127.0.0.1:3000`) verified live
 - [ ] **Railway Backend Deployment:** Blocked — `railway` CLI is not installed and no Railway credentials are configured in this environment.
 - [ ] **GitHub Push (`velatrace-financial-controls`):** Blocked — `gh` CLI is not authenticated (`You are not logged into any GitHub hosts`). Local Git repository initialized and committed cleanly.
-- [ ] **Vercel Frontend Deployment:** Deployment initiated via `vercel --prod --yes` (logged in as `shaaunakpitale-3608`).
+- [x] **Vercel Frontend Deployment:** Verified live at `https://velatrace-web.vercel.app` (`GET /`, `/app`, `/app/failure-lab`, `/app/controls` all returned HTTP 200). Note: Set `NEXT_PUBLIC_API_URL` in Vercel once the FastAPI backend is deployed to Railway.
 
 ---
 
